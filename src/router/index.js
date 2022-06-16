@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Board from '../views/Board.vue'
-import HomeView from '../views/HomeView.vue'
+import OldView from '../views/OldView.vue'
 
 Vue.use(VueRouter)
 
@@ -14,7 +14,7 @@ const routes = [
   {
     path: 'old',
     name: 'old',
-    component: HomeView,
+    component: OldView,
   },
 ]
 

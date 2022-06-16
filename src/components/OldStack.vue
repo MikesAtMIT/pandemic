@@ -37,7 +37,7 @@
 <script>
 
 export default {
-  name: 'Stack',
+  name: 'OldStack',
   props: {
     name: {
       type: String,

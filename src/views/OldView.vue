@@ -48,10 +48,10 @@
 </template>
 
 <script>
-import Stack from '@/components/Stack'
+import Stack from '@/components/OldStack'
 
 export default {
-  name: 'HomeView',
+  name: 'OldView',
   components: {
     Stack,
   },
