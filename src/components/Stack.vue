@@ -5,6 +5,9 @@
       v-for="city in cities"
       :key="city.name"
       class="city-row"
+      :class="city.highlight ? 'highlight' : ''"
+      @mouseover="() => onMouseover(city.name)"
+      @mouseleave="() => onMouseleave(city.name)"
     >
       <span v-if="showNames">{{ city.name }}</span>
       <card
@@ -20,7 +23,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 import Card from '@/components/Card'
 
 export default {
@@ -60,8 +63,15 @@ export default {
     },
   },
   methods: {
+    ...mapActions(['setHighlight']),
     onClick (card, alt) {
       this.$emit('moveCard', card, alt)
+    },
+    onMouseover (cityName) {
+      this.setHighlight({ cityName, highlight: true })
+    },
+    onMouseleave (cityName) {
+      this.setHighlight({ cityName, highlight: false })
     },
   },
 }
@@ -70,13 +80,14 @@ export default {
 <style scoped>
 .stack {
   width: 150px;
-  border: 1px solid grey;
-  margin: 1rem;
   text-align: left;
 }
 .city-row {
   height: 50px;
   display: flex;
-
+  align-items: center;
+}
+.city-row.highlight {
+  background-color: #e4f4ff;
 }
 </style>
