@@ -6,6 +6,7 @@
       :key="city.name"
       class="city-row"
     >
+      <span v-if="showNames">{{ city.name }}</span>
       <card
         v-for="card in cardsByCity[city.name]"
         :key="card.id"
@@ -38,7 +39,11 @@ export default {
     },
     active: {
       type: Boolean,
-      required: true,
+      default: false,
+    },
+    showNames: {
+      type: Boolean,
+      default: false,
     },
   },
   computed: {

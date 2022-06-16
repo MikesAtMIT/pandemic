@@ -8,6 +8,11 @@
     </b-button>
     <div class="board">
       <stack
+        v-if="stacks.length"
+        :stack="createStack('Cities')"
+        show-names
+      ></stack>
+      <stack
         v-for="(stack, idx) in stacks"
         :key="idx"
         :stack="stack"
