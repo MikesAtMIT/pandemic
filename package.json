@@ -49,12 +49,6 @@
   "jest": {
     "preset": "@vue/cli-plugin-unit-jest"
   },
-  "gitHooks": {
-    "pre-commit": "lint-staged"
-  },
-  "lint-staged": {
-    "*.{js,jsx,vue}": "vue-cli-service lint"
-  },
   "overrides": {
     "autoprefixer": "10.4.5"
   }
