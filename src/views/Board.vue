@@ -42,11 +42,11 @@ export default {
   computed: {
     ...mapState(['cities']),
     numStacks () {
-      // exclude Deck, Discard
-      return this.stacks.length - 2
+      // exclude Deck, Discard, Removed
+      return this.stacks.length - 3
     },
     discardIndex () {
-      return this.stacks.length - 1
+      return this.stacks.length - 2
     },
     deck () {
       return this.stacks[0]
@@ -60,6 +60,7 @@ export default {
     newGame () {
       this.stacks.push(this.createDeck())
       this.stacks.push(this.createStack('Discard'))
+      this.stacks.push(this.createStack('Removed'))
     },
     createDeck () {
       const deck = this.createStack('Deck')
@@ -87,7 +88,7 @@ export default {
       }
     },
     hasAlt (stack) {
-      return stack.name === 'Deck'
+      return stack.name === 'Deck' || stack.name === 'Discard'
     },
     onMoveCard (stack, card, alt) {
       let destName
@@ -100,6 +101,10 @@ export default {
         destName = 'Discard'
       } else if (stack.name.startsWith('Stack ')) {
         destName = 'Discard'
+      } else if (stack.name === 'Discard' && alt) {
+        destName = 'Removed'
+      } else {
+        return
       }
 
       const destination = this.stacks.find(stk => stk.name === destName)
