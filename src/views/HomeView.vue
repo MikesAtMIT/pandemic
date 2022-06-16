@@ -1,6 +1,5 @@
 <template>
   <div class="container-fluid">
-    <h1>Pandemic</h1>
     <div class="buttons">
       <b-button
         @click="start"
@@ -16,14 +15,15 @@
       <stack
         name="Cities"
         :cards="deck"
-        epidemic
-        @epidemic="onEpidemic"
+        name-only
       ></stack>
       <stack
         name="Deck"
         :cards="deck"
         @draw="onDraw"
         :active="stacks.length === 0"
+        :epidemic="shift"
+        @epidemic="onEpidemic"
       ></stack>
       <stack
         v-for="(stack, index) in stacks"
@@ -72,6 +72,7 @@ export default {
       discard: {},
       stacks: [],
       removed: {},
+      shift: false,
     }
   },
   computed: {
@@ -141,6 +142,18 @@ export default {
     onRemove (city) {
       this.remove(city)
     },
+  },
+  mounted () {
+    document.addEventListener('keydown', event => {
+      if (event.key === 'Shift') {
+        this.shift = true
+      }
+    })
+    document.addEventListener('keyup', event => {
+      if (event.key === 'Shift') {
+        this.shift = false
+      }
+    })
   },
 }
 </script>

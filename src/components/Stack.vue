@@ -6,17 +6,8 @@
       :key="city[0]"
       class="city-row"
     >
-      <template v-if="epidemic">
+      <template v-if="nameOnly">
         <span>{{ city[0] }}</span>
-        <b-button
-          size="sm"
-          v-if="epidemic && city[1] > 0"
-          @click="$emit('epidemic', city[0])"
-          variant="danger"
-          class="btn-epidemic"
-        >
-          &nbsp;
-        </b-button>
       </template>
       <template v-else>
         <template v-if="city[1]">
@@ -29,9 +20,9 @@
             <b-button
               size="sm"
               @click="onClick(city[0])"
-              :disabled="!active && !removable"
+              :disabled="!active && !removable && !epidemic"
               class="mx-1"
-              :variant="active ? 'primary' : removable ? 'dark' : 'secondary'"
+              :variant="epidemic ? 'danger' : active ? 'primary' : removable ? 'dark' : 'secondary'"
             >
               &nbsp;
             </b-button>
@@ -68,6 +59,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    nameOnly: {
+      type: Boolean,
+      default: false,
+    },
   },
   computed: {
     sortedCities () {
@@ -88,7 +83,9 @@ export default {
   },
   methods: {
     onClick (city) {
-      if (this.removable) {
+      if (this.epidemic) {
+        this.$emit('epidemic', city)
+      } else if (this.removable) {
         this.$emit('remove', city)
       } else {
         this.$emit('draw', city)

@@ -1,5 +1,12 @@
 <template>
   <div id="app">
+    <router-link :to="{ name: 'home' }">
+      Home
+    </router-link>
+    <router-link :to="{ name: 'old' }">
+      Old
+    </router-link>
+    <h1>Pandemic</h1>
     <router-view></router-view>
   </div>
 </template>
