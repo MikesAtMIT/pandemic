@@ -1,14 +1,68 @@
 <template>
   <div class="container-fluid">
     <b-button
-      @click="newGame"
       variant="success"
+      @click="onNewGame"
     >
       New Game
     </b-button>
+    <b-modal
+      id="modal-new-game"
+      title="Set up game"
+      @ok="newGame"
+    >
+      <div class="container-fluid">
+        <b-form @submit.prevent="onAddCity">
+          <b-form-input
+            v-model="newCity"
+            placeholder="Add new city..."
+          ></b-form-input>
+        </b-form>
+        <div
+          v-for="city in cities"
+          :key="city.name"
+          class="row row-city-setup my-1"
+        >
+          <div class="col">{{ city.name }}</div>
+          <div class="col">
+            <b-button-group>
+              <b-button
+                size="sm"
+                @click="changeCityCount({ cityName: city.name, count: -1 })"
+              >
+                -
+              </b-button>
+              <b-button
+                variant="outline-dark"
+                disabled
+                size="sm"
+                class="city-setup-count"
+              >
+                {{ city.count }}
+              </b-button>
+              <b-button
+                size="sm"
+                @click="changeCityCount({ cityName: city.name, count: 1 })"
+              >
+                +
+              </b-button>
+            </b-button-group>
+          </div>
+          <div class="col">
+            <b-button
+              size="sm"
+              @click="removeCity(city.name)"
+            >
+              ×
+            </b-button>
+          </div>
+        </div>
+      </div>
+    </b-modal>
+
     <div class="board">
       <stack
-        v-if="stacks.length"
+        v-if="gameStarted"
         :stack="createStack('Cities')"
         show-names
       ></stack>
@@ -37,10 +91,14 @@ export default {
     return {
       stacks: [],
       cardCount: 0,
+      newCity: '',
     }
   },
   computed: {
     ...mapState(['cities']),
+    gameStarted () {
+      return !!this.stacks.length
+    },
     numStacks () {
       // exclude Deck, Discard, Removed
       return this.stacks.length - 3
@@ -56,7 +114,26 @@ export default {
     },
   },
   methods: {
-    ...mapActions(['addCity', 'setShift']),
+    ...mapActions([
+      'addCity',
+      'removeCity',
+      'changeCityCount',
+      'setShift',
+    ]),
+    async onNewGame () {
+      let ok = true
+      if (this.gameStarted) {
+        ok = await this.$bvModal.msgBoxConfirm('This will clear the current game. Are you sure you want to start a new one?')
+      }
+      if (ok) {
+        this.stacks = []
+        this.$bvModal.show('modal-new-game')
+      }
+    },
+    onAddCity () {
+      this.addCity({ name: this.newCity, count: 3, highlight: false })
+      this.newCity = ''
+    },
     newGame () {
       this.stacks.push(this.createDeck())
       this.stacks.push(this.createStack('Discard'))
@@ -144,5 +221,15 @@ export default {
 <style scoped>
 .board {
   display: flex;
+}
+.row-city-setup {
+  display: flex;
+  align-items: center;
+}
+.row-city-setup:hover {
+  background-color: #e4f4ff;
+}
+.city-setup-count {
+  width: 30px;
 }
 </style>

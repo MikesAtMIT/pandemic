@@ -55,10 +55,21 @@ export default new Vuex.Store({
     shift: false,
   },
   getters: {
+    getCityByName: state => cityName => {
+      return state.cities.find(c => c.name === cityName)
+    },
   },
   mutations: {
     addCity (state, city) {
       state.cities.push(city)
+    },
+    removeCity (state, cityName) {
+      const idx = state.cities.findIndex(c => c.name === cityName)
+      state.cities.splice(idx, 1)
+    },
+    changeCityCount (state, { cityName, count }) {
+      const city = state.cities.find(c => c.name === cityName)
+      city.count = city.count + count
     },
     setShift (state, shift) {
       state.shift = shift
@@ -70,7 +81,13 @@ export default new Vuex.Store({
   },
   actions: {
     addCity ({ commit }, city) {
-      commit('addCity')
+      commit('addCity', city)
+    },
+    removeCity ({ commit }, cityName) {
+      commit('removeCity', cityName)
+    },
+    changeCityCount ({ commit }, { cityName, count }) {
+      commit('changeCityCount', { cityName, count })
     },
     setShift ({ commit }, shift) {
       commit('setShift', shift)
