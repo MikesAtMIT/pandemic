@@ -386,6 +386,8 @@ export default {
 .board {
   display: flex;
   justify-content: center;
+  height: calc(100vh - 100px);
+  overflow-y: scroll;
 }
 .row-city-setup {
   display: flex;

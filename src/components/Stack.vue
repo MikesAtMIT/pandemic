@@ -90,6 +90,14 @@ export default {
 .stack {
   width: 150px;
   text-align: left;
+  margin-top: 40px;
+}
+.stack h2 {
+  position: fixed;
+  top: 50px;
+  background-color: white;
+  width: inherit;
+  z-index: 1;
 }
 .city-row {
   height: 50px;
