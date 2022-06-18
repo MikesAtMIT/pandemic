@@ -1,72 +1,74 @@
 <template>
   <div class="container-fluid">
-    <b-button
-      variant="primary"
-      class="mx-1"
-      @click="onNewGame"
-    >
-      New Game
-    </b-button>
-    <b-button
-      variant="success"
-      class="mx-1"
-      @click="toggleGodMode"
-    >
-      God Mode
-    </b-button>
-    <b-modal
-      id="modal-new-game"
-      title="Set up game"
-      @ok="newGame"
-    >
-      <div class="container-fluid">
-        <b-form @submit.prevent="onAddCity">
-          <b-form-input
-            v-model="newCity"
-            placeholder="Add new city..."
-          ></b-form-input>
-        </b-form>
-        <div
-          v-for="city in cities"
-          :key="city.name"
-          class="row row-city-setup my-1"
-        >
-          <div class="col">{{ city.name }}</div>
-          <div class="col">
-            <b-button-group>
+    <div class="mb-3">
+      <b-button
+        variant="primary"
+        class="mx-1"
+        @click="onNewGame"
+      >
+        New Game
+      </b-button>
+      <b-button
+        variant="success"
+        class="mx-1"
+        @click="toggleGodMode"
+      >
+        God Mode
+      </b-button>
+      <b-modal
+        id="modal-new-game"
+        title="Set up game"
+        @ok="newGame"
+      >
+        <div class="container-fluid">
+          <b-form @submit.prevent="onAddCity">
+            <b-form-input
+              v-model="newCity"
+              placeholder="Add new city..."
+            ></b-form-input>
+          </b-form>
+          <div
+            v-for="city in cities"
+            :key="city.name"
+            class="row row-city-setup my-1"
+          >
+            <div class="col">{{ city.name }}</div>
+            <div class="col">
+              <b-button-group>
+                <b-button
+                  size="sm"
+                  @click="changeCityCount({ cityName: city.name, count: -1 })"
+                >
+                  -
+                </b-button>
+                <b-button
+                  variant="outline-dark"
+                  disabled
+                  size="sm"
+                  class="city-setup-count"
+                >
+                  {{ city.count }}
+                </b-button>
+                <b-button
+                  size="sm"
+                  @click="changeCityCount({ cityName: city.name, count: 1 })"
+                >
+                  +
+                </b-button>
+              </b-button-group>
+            </div>
+            <div class="col">
               <b-button
                 size="sm"
-                @click="changeCityCount({ cityName: city.name, count: -1 })"
+                @click="removeCity(city.name)"
               >
-                -
+                ×
               </b-button>
-              <b-button
-                variant="outline-dark"
-                disabled
-                size="sm"
-                class="city-setup-count"
-              >
-                {{ city.count }}
-              </b-button>
-              <b-button
-                size="sm"
-                @click="changeCityCount({ cityName: city.name, count: 1 })"
-              >
-                +
-              </b-button>
-            </b-button-group>
-          </div>
-          <div class="col">
-            <b-button
-              size="sm"
-              @click="removeCity(city.name)"
-            >
-              ×
-            </b-button>
+            </div>
           </div>
         </div>
-      </div>
-    </b-modal>
+      </b-modal>
+    </div>
 
     <div class="board">
       <stack
@@ -241,6 +243,7 @@ export default {
 <style scoped>
 .board {
   display: flex;
+  justify-content: center;
 }
 .row-city-setup {
   display: flex;
