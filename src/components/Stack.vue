@@ -16,7 +16,9 @@
         :card="card"
         :alt="alt"
         :active="active"
+        :stack-names="stackNames"
         @click="onClick"
+        @god-mode-click="onGodModeClick"
       ></card>
     </div>
   </div>
@@ -48,6 +50,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    stackNames: {
+      type: Array,
+      default: () => [],
+    },
   },
   computed: {
     ...mapState(['cities']),
@@ -65,7 +71,10 @@ export default {
   methods: {
     ...mapActions(['setHighlight']),
     onClick (card, alt) {
-      this.$emit('moveCard', card, alt)
+      this.$emit('move-card', card, alt)
+    },
+    onGodModeClick (card, stackName) {
+      this.$emit('god-mode-move-card', card, stackName)
     },
     onMouseover (cityName) {
       this.setHighlight({ cityName, highlight: true })

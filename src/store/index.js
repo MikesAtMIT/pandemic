@@ -58,6 +58,7 @@ export default new Vuex.Store({
       },
     ],
     shift: false,
+    godMode: true,
   },
   getters: {
     getCityByName: state => cityName => {
@@ -83,6 +84,9 @@ export default new Vuex.Store({
       const city = state.cities.find(c => c.name === cityName)
       city.highlight = highlight
     },
+    toggleGodMode (state) {
+      state.godMode = !state.godMode
+    },
   },
   actions: {
     addCity ({ commit }, city) {
@@ -99,6 +103,9 @@ export default new Vuex.Store({
     },
     setHighlight ({ commit }, { cityName, highlight }) {
       commit('setHighlight', { cityName, highlight })
+    },
+    toggleGodMode ({ commit }) {
+      commit('toggleGodMode')
     },
   },
   modules: {

@@ -1,12 +1,31 @@
 <template>
-  <b-button
-    class="p-card mx-1"
-    @click="onClick"
-    :variant="disabled ? 'secondary' : (alt && shift) ? 'danger' : 'primary'"
-    :disabled="disabled"
-  >
-    {{ card.id }}
-  </b-button>
+  <div>
+    <b-button
+      :id="`card-${card.id}`"
+      class="p-card mx-1"
+      @click="onClick"
+      :variant="godMode ? 'success' : disabled ? 'secondary' : (alt && shift) ? 'danger' : 'primary'"
+      :disabled="disabled"
+    >
+      {{ card.id }}
+    </b-button>
+    <b-popover
+      :target="`card-${card.id}`"
+      triggers="focus"
+      :disabled="!godMode"
+    >
+      <h5>Move card to</h5>
+      <b-button
+        v-for="stack in stackNames"
+        :key="stack"
+        size="sm"
+        block
+        @click="onGodModeClick(stack)"
+      >
+        {{ stack }}
+      </b-button>
+    </b-popover>
+  </div>
 </template>
 
 <script>
@@ -27,16 +46,31 @@ export default {
       type: Boolean,
       default: false,
     },
+    stackNames: {
+      type: Array,
+      default: () => [],
+    },
+  },
+  data () {
+    return {
+      showPopover: false,
+    }
   },
   computed: {
-    ...mapState(['shift']),
+    ...mapState(['shift', 'godMode']),
     disabled () {
-      return !(this.active || (this.alt && this.shift))
+      return !(this.godMode || this.active || (this.alt && this.shift))
     },
   },
   methods: {
     onClick () {
+      if (this.godMode) {
+        return
+      }
       this.$emit('click', this.card, this.alt && this.shift)
+    },
+    onGodModeClick (stackName) {
+      this.$emit('god-mode-click', this.card, stackName)
     },
   },
 }

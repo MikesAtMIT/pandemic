@@ -1,10 +1,18 @@
 <template>
   <div class="container-fluid">
     <b-button
-      variant="success"
+      variant="primary"
+      class="mx-1"
       @click="onNewGame"
     >
       New Game
+    </b-button>
+    <b-button
+      variant="success"
+      class="mx-1"
+      @click="toggleGodMode"
+    >
+      God Mode
     </b-button>
     <b-modal
       id="modal-new-game"
@@ -72,7 +80,9 @@
         :stack="stack"
         :alt="hasAlt(stack)"
         :active="idx === numStacks"
-        @moveCard="(card, alt) => onMoveCard(stack, card, alt)"
+        :stack-names="stackNames"
+        @move-card="(card, alt) => onMoveCard(stack, card, alt)"
+        @god-mode-move-card="(card, dest) => onGodModeMoveCard(stack, card, dest)"
       ></stack>
     </div>
   </div>
@@ -112,6 +122,9 @@ export default {
     discard () {
       return this.stacks[this.discardIndex]
     },
+    stackNames () {
+      return this.stacks.map(stack => stack.name)
+    },
   },
   methods: {
     ...mapActions([
@@ -119,6 +132,7 @@ export default {
       'removeCity',
       'changeCityCount',
       'setShift',
+      'toggleGodMode',
     ]),
     async onNewGame () {
       let ok = true
@@ -185,6 +199,11 @@ export default {
         return
       }
 
+      const destination = this.stacks.find(stk => stk.name === destName)
+      this.moveCard(card, stack, destination)
+      this.clearEmptyStack()
+    },
+    onGodModeMoveCard (stack, card, destName) {
       const destination = this.stacks.find(stk => stk.name === destName)
       this.moveCard(card, stack, destination)
       this.clearEmptyStack()
