@@ -25,7 +25,7 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import Card from '@/components/Card'
 
 export default {
@@ -56,7 +56,7 @@ export default {
     },
   },
   computed: {
-    ...mapState(['cities']),
+    ...mapGetters(['cities']),
     cardsByCity () {
       const cardsByCity = {}
       for (const city of this.cities) {

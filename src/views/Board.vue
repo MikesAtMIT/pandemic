@@ -170,7 +170,7 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import Stack from '@/components/Stack'
 
 export default {
@@ -188,7 +188,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['cities']),
+    ...mapGetters(['cities']),
     gameStarted () {
       return !!this.stacks.length
     },

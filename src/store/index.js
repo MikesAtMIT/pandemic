@@ -7,7 +7,7 @@ export default new Vuex.Store({
   state: {
     cities: [
       {
-        name: 'hollow men',
+        name: '* hollow men *',
         count: 4,
         highlight: false,
       },
@@ -63,6 +63,17 @@ export default new Vuex.Store({
   getters: {
     getCityByName: state => cityName => {
       return state.cities.find(c => c.name === cityName)
+    },
+    cities (state) {
+      return state.cities.sort((a, b) => {
+        if (a.name < b.name) {
+          return -1
+        } else if (a.name > b.name) {
+          return 1
+        } else {
+          return 0
+        }
+      })
     },
   },
   mutations: {
