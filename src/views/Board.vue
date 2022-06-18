@@ -9,6 +9,70 @@
         New Game
       </b-button>
       <b-button
+        variant="info"
+        class="mx-1"
+        v-b-modal.modal-save-game
+      >
+        Save Game
+      </b-button>
+      <b-modal
+        id="modal-save-game"
+        title="Save Game"
+        size="xl"
+      >
+        <div class="d-flex align-items-center mb-2">
+          Download a save game file
+          <b-button
+            @click="downloadGameState"
+            size="sm"
+            class="ml-2"
+          >
+            Download
+          </b-button>
+        </div>
+        <div class="d-flex align-items-center">
+          Or copy the following and save it in a text file
+          <b-button
+            @click="copyGameState"
+            size="sm"
+            class="ml-2"
+          >
+            Copy
+          </b-button>
+        </div>
+        <div class="p-3 text-monospace save-game-container">
+          {{ saveGameState }}
+        </div>
+      </b-modal>
+
+      <b-button
+        variant="warning"
+        class="mx-1"
+        v-b-modal.modal-load-game
+      >
+        Load Game
+      </b-button>
+      <b-modal
+        id="modal-load-game"
+        title="Load Game"
+        size="xl"
+        @ok="loadGame"
+      >
+        <b-form-file
+          v-model="loadGameFile"
+          accept=".txt"
+          placeholder="Choose a save game file..."
+          drop-placeholder="Drop save game file here..."
+          class="mb-3"
+        ></b-form-file>
+        <b-textarea
+          v-model="loadGameState"
+          rows="5"
+          placeholder="Or paste in the saved game state"
+        ></b-textarea>
+      </b-modal>
+
+      <b-button
         variant="success"
         class="mx-1"
         @click="toggleGodMode"
@@ -17,7 +81,7 @@
       </b-button>
       <b-modal
         id="modal-new-game"
-        title="Set up game"
+        title="Setup Game"
         @ok="newGame"
       >
         <div class="container-fluid">
@@ -104,6 +168,8 @@ export default {
       stacks: [],
       cardCount: 0,
       newCity: '',
+      loadGameFile: null,
+      loadGameState: '',
     }
   },
   computed: {
@@ -127,6 +193,13 @@ export default {
     stackNames () {
       return this.stacks.map(stack => stack.name)
     },
+    saveGameState () {
+      return JSON.stringify({
+        stacks: this.stacks,
+        cardCount: this.cardCount,
+        cities: this.cities,
+      })
+    },
   },
   methods: {
     ...mapActions([
@@ -135,6 +208,7 @@ export default {
       'changeCityCount',
       'setShift',
       'toggleGodMode',
+      'setCities',
     ]),
     async onNewGame () {
       let ok = true
@@ -224,6 +298,31 @@ export default {
 
       this.stacks.splice(this.discardIndex, 0, newStack)
     },
+    async copyGameState () {
+      await navigator.clipboard.writeText(this.saveGameState)
+    },
+    downloadGameState () {
+      const element = document.createElement('a')
+      element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(this.saveGameState))
+      element.setAttribute('download', `pandemic save ${new Date().toISOString()}.txt`)
+      element.style.display = 'none'
+      document.body.appendChild(element)
+      element.click()
+      document.body.removeChild(element)
+    },
+    async loadGame () {
+      let gameData
+      if (this.loadGameFile) {
+        gameData = JSON.parse(await this.loadGameFile.text())
+        this.loadGameFile = null
+      } else {
+        gameData = JSON.parse(this.loadGameState)
+        this.loadGameState = ''
+      }
+      this.stacks = gameData.stacks
+      this.cardCount = gameData.cardCount
+      this.setCities(gameData.cities)
+    },
   },
   mounted () {
     document.addEventListener('keydown', event => {
@@ -254,5 +353,9 @@ export default {
 }
 .city-setup-count {
   width: 30px;
+}
+.save-game-container {
+  max-height: 50vh;
+  overflow: scroll;
 }
 </style>

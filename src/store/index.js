@@ -66,6 +66,9 @@ export default new Vuex.Store({
     },
   },
   mutations: {
+    setCities (state, cities) {
+      state.cities = cities
+    },
     addCity (state, city) {
       state.cities.push(city)
     },
@@ -89,6 +92,9 @@ export default new Vuex.Store({
     },
   },
   actions: {
+    setCities ({ commit }, cities) {
+      commit('setCities', cities)
+    },
     addCity ({ commit }, city) {
       commit('addCity', city)
     },
