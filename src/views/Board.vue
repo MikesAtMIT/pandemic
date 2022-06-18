@@ -256,6 +256,7 @@ export default {
       if (this.numStacks && !(this.stacks[this.numStacks].cards.length)) {
         this.stacks.splice(this.numStacks, 1)
       }
+      this.autoSave()
     },
     hasAlt (stack) {
       return stack.name === 'Deck' || stack.name === 'Discard'
@@ -321,9 +322,21 @@ export default {
         gameData = JSON.parse(this.loadGameState)
         this.loadGameState = ''
       }
+      this.loadGameData(gameData)
+    },
+    loadGameData (gameData) {
       this.stacks = gameData.stacks
       this.cardCount = gameData.cardCount
       this.setCities(gameData.cities)
+    },
+    autoSave () {
+      this.$cookies.set('gameData', this.saveGameState)
+    },
+    autoLoad () {
+      if (this.$cookies.isKey('gameData')) {
+        const gameData = this.$cookies.get('gameData')
+        this.loadGameData(gameData)
+      }
     },
   },
   mounted () {
@@ -337,6 +350,7 @@ export default {
         this.setShift(false)
       }
     })
+    this.autoLoad()
   },
 }
 </script>
