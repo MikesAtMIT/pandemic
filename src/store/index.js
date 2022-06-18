@@ -58,7 +58,7 @@ export default new Vuex.Store({
       },
     ],
     shift: false,
-    godMode: true,
+    godMode: false,
   },
   getters: {
     getCityByName: state => cityName => {
