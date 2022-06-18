@@ -7,7 +7,9 @@
       :variant="godMode ? 'success' : disabled ? 'secondary' : (alt && shift) ? 'danger' : 'primary'"
       :disabled="disabled"
     >
-      <template v-if="godMode">{{ card.id }}</template>
+      <template v-if="godMode">
+        {{ card.id }}
+      </template>
     </b-button>
     <b-popover
       :target="`card-${card.id}`"

@@ -96,7 +96,9 @@
             :key="city.name"
             class="row row-city-setup my-1"
           >
-            <div class="col">{{ city.name }}</div>
+            <div class="col">
+              {{ city.name }}
+            </div>
             <div class="col">
               <b-button-group>
                 <b-button
