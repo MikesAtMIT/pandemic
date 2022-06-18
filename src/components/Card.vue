@@ -51,11 +51,6 @@ export default {
       default: () => [],
     },
   },
-  data () {
-    return {
-      showPopover: false,
-    }
-  },
   computed: {
     ...mapState(['shift', 'godMode']),
     disabled () {
