@@ -1,24 +1,32 @@
 <template>
   <div class="container-fluid">
-    <div class="mb-3">
+    <b-button-group class="mb-3 game-menu">
       <b-button
-        variant="primary"
-        class="mx-1"
-        @click="onNewGame"
+        variant="danger"
       >
-        New Game
+        <span class="font-weight-bold">Pandemic</span>
       </b-button>
       <b-button
-        variant="info"
-        class="mx-1"
-        v-b-modal.modal-save-game
+        variant="outline-danger"
+        @click="onNewGame"
+        v-b-tooltip.hover
+        title="New Game"
       >
-        Save Game
+        <b-icon-plus-square></b-icon-plus-square>
+      </b-button>
+      <b-button
+        variant="outline-danger"
+        v-b-modal.modal-save-game
+        v-b-tooltip.hover
+        title="Export Game"
+      >
+        <b-icon-download></b-icon-download>
       </b-button>
       <b-modal
         id="modal-save-game"
-        title="Save Game"
+        title="Export Game"
         size="xl"
+        hide-footer
       >
         <div class="d-flex align-items-center mb-2">
           Download a save game file
@@ -27,6 +35,7 @@
             size="sm"
             class="ml-2"
           >
+            <b-icon-download></b-icon-download>
             Download
           </b-button>
         </div>
@@ -37,6 +46,7 @@
             size="sm"
             class="ml-2"
           >
+            <b-icon-files></b-icon-files>
             Copy
           </b-button>
         </div>
@@ -46,16 +56,18 @@
       </b-modal>
 
       <b-button
-        variant="warning"
-        class="mx-1"
+        variant="outline-danger"
         v-b-modal.modal-load-game
+        v-b-tooltip.hover
+        title="Import Game"
       >
-        Load Game
+        <b-icon-upload></b-icon-upload>
       </b-button>
       <b-modal
         id="modal-load-game"
-        title="Load Game"
+        title="Import Game"
         size="xl"
+        ok-title="Import"
         @ok="loadGame"
       >
         <b-form-file
@@ -73,11 +85,12 @@
       </b-modal>
 
       <b-button
-        variant="success"
-        class="mx-1"
+        variant="outline-danger"
         @click="toggleGodMode"
+        v-b-tooltip.hover
+        title="God Mode"
       >
-        God Mode
+        <b-icon-lightning></b-icon-lightning>
       </b-button>
       <b-modal
         id="modal-new-game"
@@ -134,7 +147,7 @@
           </div>
         </div>
       </b-modal>
-    </div>
+    </b-button-group>
 
     <div class="board">
       <stack
@@ -359,6 +372,17 @@ export default {
 </script>
 
 <style scoped>
+.game-menu .btn {
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+  border-top: 0;
+}
+.game-menu .btn:first-child {
+  border-bottom-left-radius: 1rem;
+}
+.game-menu .btn:last-child {
+  border-bottom-right-radius: 1rem;
+}
 .board {
   display: flex;
   justify-content: center;
