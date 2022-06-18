@@ -7,6 +7,11 @@ export default new Vuex.Store({
   state: {
     cities: [
       {
+        name: 'hollow men',
+        count: 4,
+        highlight: false,
+      },
+      {
         name: 'new york',
         count: 3,
         highlight: false,

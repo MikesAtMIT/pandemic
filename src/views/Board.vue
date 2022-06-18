@@ -127,6 +127,7 @@ export default {
       }
       if (ok) {
         this.stacks = []
+        this.cardCount = 0
         this.$bvModal.show('modal-new-game')
       }
     },
