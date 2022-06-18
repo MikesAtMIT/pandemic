@@ -231,6 +231,7 @@ export default {
       this.stacks.push(this.createDeck())
       this.stacks.push(this.createStack('Discard'))
       this.stacks.push(this.createStack('Removed'))
+      this.autoSave()
     },
     createDeck () {
       const deck = this.createStack('Deck')
@@ -256,7 +257,6 @@ export default {
       if (this.numStacks && !(this.stacks[this.numStacks].cards.length)) {
         this.stacks.splice(this.numStacks, 1)
       }
-      this.autoSave()
     },
     hasAlt (stack) {
       return stack.name === 'Deck' || stack.name === 'Discard'
@@ -281,11 +281,13 @@ export default {
       const destination = this.stacks.find(stk => stk.name === destName)
       this.moveCard(card, stack, destination)
       this.clearEmptyStack()
+      this.autoSave()
     },
     onGodModeMoveCard (stack, card, destName) {
       const destination = this.stacks.find(stk => stk.name === destName)
       this.moveCard(card, stack, destination)
       this.clearEmptyStack()
+      this.autoSave()
     },
     moveCard (card, source, destination) {
       const idx = source.cards.indexOf(card)
@@ -300,6 +302,7 @@ export default {
       }
 
       this.stacks.splice(this.discardIndex, 0, newStack)
+      this.autoSave()
     },
     async copyGameState () {
       await navigator.clipboard.writeText(this.saveGameState)
@@ -328,14 +331,14 @@ export default {
       this.stacks = gameData.stacks
       this.cardCount = gameData.cardCount
       this.setCities(gameData.cities)
+      this.autoSave()
     },
     autoSave () {
-      this.$cookies.set('gameData', this.saveGameState)
+      localStorage.saveGame = this.saveGameState
     },
     autoLoad () {
-      if (this.$cookies.isKey('gameData')) {
-        const gameData = this.$cookies.get('gameData')
-        this.loadGameData(gameData)
+      if (localStorage.saveGame) {
+        this.loadGameData(JSON.parse(localStorage.saveGame))
       }
     },
   },
