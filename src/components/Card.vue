@@ -2,12 +2,12 @@
   <div>
     <b-button
       :id="`card-${card.id}`"
-      class="p-card mx-1"
+      class="p-card mx-1 px-0"
       @click="onClick"
       :variant="godMode ? 'success' : disabled ? 'secondary' : (alt && shift) ? 'danger' : 'primary'"
       :disabled="disabled"
     >
-      {{ card.id }}
+      <template v-if="godMode">{{ card.id }}</template>
     </b-button>
     <b-popover
       :target="`card-${card.id}`"
